@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.15838028035</groupId>
+	<artifactId>common-code-generate-web</artifactId>
+	<packaging>jar</packaging>
+	
+	<version>0.0.1-SNAPSHOT</version>
+
+	<scm>
+		<connection>scm:git:git@github.com:15838028035/common-code-generate-web.git</connection>
+		<developerConnection>scm:git:git@github.com:15838028035/common-code-generate-web.git</developerConnection>
+		<url>scm:git:git@github.com:15838028035/common-code-generate-web.git</url>
+	</scm>
+	
+   <!-- 使用最新的spring-boot版本 -->
+   <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.0.RELEASE</version>
+    </parent>
+    
+	
+	<!-- 设定除中央仓repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查 -->
+	<repositories>
+		<repository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+            <id>oss-releases</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>oss-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        
+	</distributionManagement>
+
+    <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jdk.version>1.8</jdk.version>
+	</properties>
+
+      <dependencies>
+      
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-web</artifactId>
+       </dependency>
+            
+	 <dependency>
+                <groupId>com.github.15838028035</groupId>
+                <artifactId>common-code-generate</artifactId>
+              <version>${project.version}</version>
+          </dependency>
+
+</dependencies>
+	
+	
+</project>

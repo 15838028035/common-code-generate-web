@@ -1,0 +1,27 @@
+*.class
+.classpath
+.settings/
+*.log
+*.jar
+.project
+*.jar
+*.war
+*.ear
+*.zip
+*.rar
+
+
+
+# system ignore
+.DS_Store
+Thumbs.db
+
+*.cache
+*.diff
+*.patch
+*.tmp
+*.launch
+
+template/
+
+target/
