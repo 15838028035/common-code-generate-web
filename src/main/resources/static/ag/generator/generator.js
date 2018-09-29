@@ -10,33 +10,45 @@ generator.columns = function () {
     return [{
         checkbox: true
     }, {
-        field: 'tableName',
+        field: 'sqlName',
         title: '表名'
     }, {
-        field: 'tableComment',
+        field: 'remarks',
         title: '表备注'
-    }, {
-        field: 'createTime',
-        title: '创建时间'
     }];
 };
 generator.queryParams = function (params) {
-    if (!params)
-        return {
-            name: $("#name").val()
-        };
+   
+	 if (!params)
+	        return {
+			   jdbcUrl: $("#jdbcUrl").val(),
+		        jdbcUsername: $("#jdbcUsername").val(),
+		        jdbcPasswordText: $("#jdbcPasswordText").val()
+	        };
+	        
     var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
         limit: params.limit, //页面大小
         offset: params.offset, //页码
-        tableName: $("#name").val()
+        jdbcUrl: $("#jdbcUrl").val(),
+        jdbcUsername: $("#jdbcUsername").val(),
+        jdbcPasswordText: $("#jdbcPasswordText").val()
     };
     return temp;
 };
 
 generator.init = function () {
 
+	var jdbcUrl = $("#jdbcUrl").val();
+	var jdbcUsername = $("#jdbcUsername").val();
+	var jdbcPasswordText = $("#jdbcPasswordText").val();
+	var tableStr = $("#tableStr").val();
+	var basepackageStr = $("#basepackageStr").val();
+	var template = $("#template").val();
+	
+	var queryUrl = generator.baseUrl + "/page";
+	
     generator.table = $('#' + generator.tableId).bootstrapTable({
-        url: generator.baseUrl + '/page', //请求后台的URL（*）
+        url: queryUrl, //请求后台的URL（*）
         method: 'get', //请求方式（*）
         toolbar: '#' + generator.toolbarId, //工具按钮用哪个容器
         striped: true, //是否显示行间隔色
@@ -61,9 +73,10 @@ generator.init = function () {
         detailView: false, //是否显示父子表
         columns: generator.columns(),
         responseHandler: function(res) {
+        	
             return {
-                "total": res.data.total,//总页数
-                "rows": res.data.rows   //数据
+                "total": res.total,//总页数
+                "rows": res.rows   //数据
             };
         }
     });
@@ -74,12 +87,34 @@ generator.select = function (layerTips) {
         generator.currentItems = rows;
         return true;
     } else {
-        layerTips.msg("请至少选中一行");
+        alert("请至少选中一行");
         return false;
     }
 };
 
+generator.getInitConfig = function () {
+	  $.ajax({
+          url: "/base/generator/getInitConfig",
+          data: {},
+          type: "GET",
+          dataType: "json",
+          async: false, 
+          
+          success: function (data) {
+        	  
+        	  $("#jdbcUrl").val(data['jdbc.url']);
+        	  $("#jdbcUsername").val(data['jdbc.username']);
+        	  $("#jdbcPasswordText").val(data['jdbc.password']);
+        	  $("#tableStr").val(data.tableStr);
+        	  $("#basepackageStr").val(data.basepackage);
+        	  $("#template").val(data.template);
+          }
+          
+      });
+};
+
 layui.use(['form', 'layedit', 'laydate'], function () {
+	generator.getInitConfig();
     generator.init();
 
     var editIndex;
@@ -93,13 +128,36 @@ layui.use(['form', 'layedit', 'laydate'], function () {
     $('#btn_query').on('click', function () {
         generator.table.bootstrapTable('refresh', generator.queryParams());
     });
+    
     $('#btn_generate').on('click',function(){
-        if(generator.select()){
-            var tableNames = [];
-            for(var i=0;i<generator.currentItems.length;i++){
-                tableNames.push(generator.currentItems[i].tableName);
-            }
-            location.href = "/base/generator/code?tables=" + JSON.stringify(tableNames);
-        }
+    		
+    		var jdbcUrl = $("#jdbcUrl").val();
+    		var jdbcUsername = $("#jdbcUsername").val();
+    		var jdbcPasswordText = $("#jdbcPasswordText").val();
+    		var tableStr = $("#tableStr").val();
+    		var basepackageStr = $("#basepackageStr").val();
+    		var template = $("#template").val();
+    		
+    		 if(generator.select()){
+    	            var tableNames = [];
+    	            for(var i=0;i<generator.currentItems.length;i++){
+    	                tableNames.push(generator.currentItems[i].sqlName);
+    	                tableStr = generator.currentItems[i].sqlName;
+    	            }
+    	            
+    	            var postData = {
+        					"jdbcUrl":jdbcUrl,
+        					 "jdbcUsername":jdbcUsername,
+        					 "jdbcPasswordText":jdbcPasswordText,
+        					 "tableStr":tableStr,
+        					 "basepackageStr":basepackageStr,
+        					 "template":template
+        			 };
+        			 
+        			 
+                location.href = "/base/generator/code?jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText+"&tableStr="+tableStr+"&basepackageStr="+basepackageStr+"&template="+template;
+        
+    	     }
     });
+    
 });
