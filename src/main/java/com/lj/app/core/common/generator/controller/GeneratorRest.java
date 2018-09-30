@@ -52,7 +52,7 @@ public class GeneratorRest {
     GeneratorProperties.setProperty("jdbc.username", jdbcUsername);
     GeneratorProperties.setProperty("jdbc.password", jdbcPasswordText);
     
-      List result = DbTableFactory.getInstance().getAllTables();
+      List<Table> result = DbTableFactory.getInstance().getAllTables();
       int total =result.size();
       
       List<Map<String,Object>> restultList = new ArrayList<>();
