@@ -9,18 +9,14 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.lj.app.core.common.generator.GeneratorFacade;
 import com.lj.app.core.common.generator.util.FileHelper;
 
-import ch.qos.logback.core.util.FileUtil;
-
 
 /**
- * 生成器的测试工具类,用于将模板内容生成在某个临时文件夹,
- * 然后读取临时文件夹的内容返回 返回之前会删除临时文件夹
+ * 生成器工具
  * 
  */
 public class GeneratorTestHelper {
@@ -72,9 +68,7 @@ public class GeneratorTestHelper {
         }
     }
     
-    for(File f : files) {
-        FileHelper.deleteQuietly(f);
-    }
+        FileHelper.deleteQuietly(tempDir);
     
   }
 
