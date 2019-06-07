@@ -85,7 +85,10 @@
 
     <script type="text/javascript">
     //拦截器判断
-        var token = $.cookie('bearcktkaeskey');
+       var token = $.cookie('bearcktkaeskey');
+        if (token == ""||token==undefined) {
+            location.href = ctx + '/login.html';
+        }
         
      var $tableList = $('#tableList');
      var $btn_query = $('#btn_query');

@@ -93,7 +93,11 @@
     </table>
     
     <script type="text/javascript">
-
+    var token = $.cookie('bearcktkaeskey');
+    if (token == ""||token==undefined) {
+        location.href = ctx + '/login.html';
+    }
+    
 //加载
 var loadInfo = {
     init:function () {

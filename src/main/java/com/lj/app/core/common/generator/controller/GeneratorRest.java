@@ -1,7 +1,6 @@
 package com.lj.app.core.common.generator.controller;
 
 import java.io.ByteArrayOutputStream;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;

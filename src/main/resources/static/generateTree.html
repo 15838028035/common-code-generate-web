@@ -46,6 +46,11 @@
  <div id="treediv"></div>
         
         <script   type="text/javascript">
+        var token = $.cookie('bearcktkaeskey');
+        if (token == ""||token==undefined) {
+            location.href = ctx + '/login.html';
+        }
+        
         $(function(){
             //获取权限菜单树
             var jsonData = $.ajax({
