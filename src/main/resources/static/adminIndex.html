@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>代码生成器首页</title>
+   <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--css样式-->
+    <link href="scripts/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="scripts/bootstrap-table/bootstrap-table.css" rel="stylesheet">
+    <!--js-->
+
+    <script src="scripts/jquery/jquery-3.2.0.min.js"></script>
+    <script src="scripts/bootstrap/js/bootstrap.js"></script>
+    <script src="scripts/bootstrap-table/bootstrap-table.js"></script>
+    <script src="scripts/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="scripts/bootstrap-table/extensions/multiple-sort/bootstrap-table-multiple-sort.js"></script>
+
+    <link href="scripts/x-editable/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <script src="scripts/bootstrap-table/extensions/editable/bootstrap-table-editable.js"></script>
+    <script src="scripts/x-editable/bootstrap3-editable/js/bootstrap-editable.js"></script>
+
+    <script src="scripts/bootstrap-table/extensions/export/tableExport.js"></script>
+    <script src="scripts/bootstrap-table/extensions/export/bootstrap-table-export.js"></script>
+
+    <script src="scripts/bootbox/bootbox.min.js"></script>
+
+    <script src="scripts/bootstrap-datetimepicker/js/moment.js"></script>
+    <script src="scripts/bootstrap-datetimepicker/js/moment_zh-CN.js"></script>
+    <link href="scripts/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <script src="scripts/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="scripts/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+
+    <script src="scripts/jquery.cookie.js"></script>
+    <script src="scripts/common.js"></script>
+
+<script language="javascript"  type="text/javascript">
+</script>
+</head>
+<body>
+
+<div class="panel-body" style="padding-bottom:0px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form id="formSearch" class="form-horizontal">
+                    <div class="form-group" style="margin-top:15px">
+
+                    <label class="control-label col-sm-1" for="jdbcUrl">数据库地址</label>
+                    <div class="col-sm-2"> <input type="text" class="form-control" id="jdbcUrl"></div>
+                        
+                    <label class="control-label col-sm-1" for="jdbcUsername">数据库账号</label>
+                    <div class="col-sm-2"> <input type="text" class="form-control" id="jdbcUsername"></div>
+                    
+                    <label class="control-label col-sm-1" for="jdbcPasswordText">数据库密码</label>
+                    <div class="col-sm-2"> <input type="text" class="form-control" id="jdbcPasswordText"></div>
+                        
+                    <label class="control-label col-sm-1" for="template">模版路径</label>
+                    <div class="col-sm-2"> <input type="text" class="form-control" id="template"></div>
+                       <label class="control-label col-sm-1" for="basepackageStr">包路径</label>
+                    <div class="col-sm-2"> <input type="text" class="form-control" id="basepackageStr"></div>
+
+                <div class="col-sm-12" style="text-align:left;">
+                    <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
+                </div>
+                </div>
+                </form>
+            </div>
+        </div>       
+
+        <div id="toolbar" class="btn-group">
+        </div>
+        
+        <table id="tableList" style="word-break:break-all; word-wrap:break-word;"></table>
+    </div>
+
+
+    <script type="text/javascript">
+            
+    </script>
+    
+     <table width="100%"  hight="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+                <td width="20%" valign="top">
+                    <iframe id="LT_menu" src=  "" scrolling="auto" width="100%" height="600" frameborder="0"></iframe>
+                </td>
+                <td width="80%" valign="top">
+                       <iframe id="LT_main" src= "" scrolling="auto" width="100%" height="600" frameborder="0" allowTransparency="true" style="overflow-x:hidden;"></iframe>
+                </td>
+        </tr>
+    </table>
+    
+    <script type="text/javascript">
+
+//加载
+var loadInfo = {
+    init:function () {
+    	loadInfo.getInitConfig();
+    	loadInfo.loadFrame1();
+    	loadInfo.loadFrame2();
+    	loadInfo.btnQueryClick();
+    },
+    loadFrame1:function () {
+    	alert("1");
+    	var jdbcUrl =encodeURIComponent( $("#jdbcUrl").val());
+        var jdbcUsername = $("#jdbcUsername").val();
+        var jdbcPasswordText = $("#jdbcPasswordText").val();
+        
+        alert(jdbcUrl);
+        $("#LT_menu").attr("src",ctx + "/generateTree.html?jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText);
+    }
+    ,
+    loadFrame2:function () {
+    	$("#LT_main").attr("src",ctx + "/generateTableList.html?parentId=0");
+    },btnQueryClick:function () {
+    	$("#btnQuery").click(function(){
+	        var jdbcUrl = $("#jdbcUrl").val();
+	        var jdbcUsername = $("#jdbcUsername").val();
+	        var jdbcPasswordText = $("#jdbcPasswordText").val();
+	        $("#LT_menu").attr("src",ctx + "/generateTree.html?jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText);
+	        //$("#LT_main").attr("src",ctx + "/generateTableList.html?jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText);
+    	});
+    	
+    	},getInitConfig:function () {
+    		$.ajax({
+    	          url: "/base/generator/getInitConfig",
+    	          data: {},
+    	          type: "GET",
+    	          dataType: "json",
+    	          async: false, 
+    	          
+    	          success: function (data) {
+    	        	  alert("2");
+    	        	  console.log("data",data);
+    	        	  
+    	              $("#jdbcUrl").val(data['jdbc.url']);
+    	              $("#jdbcUsername").val(data['jdbc.username']);
+    	              $("#jdbcPasswordText").val(data['jdbc.password']);
+    	              $("#tableStr").val(data.tableStr);
+    	              $("#basepackageStr").val(data.basepackage);
+    	              $("#template").val(data.template);
+    	          }
+    	          
+    	      });
+            }
+};
+
+$(function(){
+//用户登录
+loadInfo.init();
+
+})
+
+</script>
+
+</body>
+
+</body>
+</html>

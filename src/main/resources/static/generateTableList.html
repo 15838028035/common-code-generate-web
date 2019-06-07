@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>权限信息表管理</title>
+   <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--css样式-->
+    <link href="scripts/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="scripts/bootstrap-table/bootstrap-table.css" rel="stylesheet">
+    <!--js-->
+
+    <script src="scripts/jquery/jquery-3.2.0.min.js"></script>
+    <script src="scripts/bootstrap/js/bootstrap.js"></script>
+    <script src="scripts/bootstrap-table/bootstrap-table.js"></script>
+    <script src="scripts/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="scripts/bootstrap-table/extensions/multiple-sort/bootstrap-table-multiple-sort.js"></script>
+
+    <link href="scripts/x-editable/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <script src="scripts/bootstrap-table/extensions/editable/bootstrap-table-editable.js"></script>
+    <script src="scripts/x-editable/bootstrap3-editable/js/bootstrap-editable.js"></script>
+
+    <script src="scripts/bootstrap-table/extensions/export/tableExport.js"></script>
+    <script src="scripts/bootstrap-table/extensions/export/bootstrap-table-export.js"></script>
+
+    <script src="scripts/bootbox/bootbox.min.js"></script>
+
+    <script src="scripts/bootstrap-datetimepicker/js/moment.js"></script>
+    <script src="scripts/bootstrap-datetimepicker/js/moment_zh-CN.js"></script>
+    <link href="scripts/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <script src="scripts/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="scripts/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+
+    <script src="scripts/jquery.cookie.js"></script>
+    <script src="scripts/common.js"></script>
+
+<script language="javascript"  type="text/javascript">
+</script>
+</head>
+
+<body>
+
+
+<div class="panel-body" style="padding-bottom:0px;">
+        <div id="toolbar" class="btn-group">
+    
+            <button id="btn_generate" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>代码生成
+            </button>
+        </div>
+        
+        <table id="tableList" style="word-break:break-all; word-wrap:break-word;"></table>
+    </div>
+
+
+    <script type="text/javascript">
+    //拦截器判断
+        var token = $.cookie('bearcktkaeskey');
+        
+     var $tableList = $('#tableList');
+     var $btn_query = $('#btn_query');
+        
+         $btn_query.click(function () {
+             refreshGrid();
+        });
+
+        function refreshGrid(){
+          $tableList.bootstrapTable('refresh');
+        }
+        
+        var appId = getUrlParam("appId");
+     
+     var TableInit = function () {
+        var oTableInit = new Object();
+        //初始化Table
+        oTableInit.Init = function () {
+            $('#tableList').bootstrapTable({
+                url: ctx+'/base/generator/tableInfo?TOKEN='+token+"&jdbcUrl="+getUrlParam("jdbcUrl")+"&jdbcUsername="
+                		+getUrlParam("jdbcUsername")+"&jdbcPasswordText="+getUrlParam("jdbcPasswordText")+"&tableStr="+getUrlParam("tableStr"),         //请求后台的URL（*）
+                method: 'get',                     //请求方式（*）
+                dataType: "json",
+                contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+                dataField: "rows",//服务端返回数据键值 就是说记录放的键值是rows，分页时使用总记录数的键值为total
+                totalField: 'total',
+                toolbar: '#toolbar',                //工具按钮用哪个容器
+                striped: true,                      //是否显示行间隔色
+                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                pagination: true,                   //是否显示分页（*）
+                smartDisplay:false,
+                showRefresh:true,
+                showColumns:true,
+                showExport: true,
+                searchOnEnterKey:true,
+                showFooter:true,
+                search:false,
+                sortable: true,                     //是否启用排序
+                sortOrder: "asc",                   //排序方式
+                singleSelect:false,
+                clickToSelect: true,
+                smartDisplay:true,
+                queryParams: oTableInit.queryParams,//传递参数（*）
+                queryParamsType:'',                 //  queryParamsType = 'limit' 参数: limit, offset, search, sort, order;
+                                                    //  queryParamsType = '' 参数: pageSize, pageNumber, searchText, sortName, sortOrder.
+                sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                pageNumber:1,                       //初始化加载第一页，默认第一页
+                pageSize: 25,                       //每页的记录行数（*）
+                pageList: [5,10, 25, 40, 50, 100,'all'],        //可供选择的每页的行数（*）
+                strictSearch: true,
+                clickToSelect: true,                //是否启用点击选中行
+                 uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                cardView: false,                    //是否显示详细视图
+                detailView: false,                   //是否显示父子表
+                undefinedText:"",
+                columns: [  
+                        { field: 'checkStatus', title: '',checkbox:true }, 
+                           {field : 'Number', title : '行号', formatter : function(value, row, index) {  
+                                       var pageSize = $('#tableList').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+                                       var pageNumber = $('#tableList').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+                                       return pageSize * (pageNumber - 1) + index + 1;
+                                    }  
+                           },
+                    {field:'sqlName',title:'列名', sortable:true},
+                    {field:'remarks',title:'列类型', sortable:true},
+                    {field:'remarks',title:'备注', sortable:true},
+                    {field:'remarks',title:'列表是否显示', sortable:true},
+                    {field:'remarks',title:'列表查询类型', sortable:true},
+                    {field:'remarks',title:'表单是否显示', sortable:true},
+                    {field:'remarks',title:'表单类型', sortable:true},
+                    {field:'remarks',title:'排序编号', sortable:true}
+                    
+                        ],                      
+                formatLoadingMessage: function () {
+                    return "请稍等，正在加载中...";
+                },
+                formatNoMatches: function () { //没有匹配的结果
+                    return '无符合条件的记录';
+                },
+                onLoadError: function (data) {
+                    $('#tableList').bootstrapTable('removeAll');
+                },
+                responseHandler: function (res) {
+                    return {
+                        total: res.count,
+                        rows: res.data
+                    };
+                }
+              
+            });
+            
+     if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){//如果是移动端
+          $("#tableList").bootstrapTable("toggleView");
+         }
+        };
+ 
+        //得到查询的参数
+      oTableInit.queryParams = function (params) {
+            var perName=$("#perName").val();
+            var code=$("#code").val();
+            var keyCode=$("#keyCode").val();
+
+            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                 limit:params.pageSize,
+                 page:params.pageNumber,
+                "sortName":this.sortName,
+                "sortOrder":this.sortOrder,
+                "perName":perName,
+                "code":code,
+                "keyCode":keyCode,
+                "appId":getUrlParam("appId"),
+                "parentId":getUrlParam("parentId")
+            };
+            return temp;
+        };
+        return oTableInit;
+    };
+        
+   var add = {
+        init: function () {
+            this.btn_add();
+        },
+        btn_add:function(){
+            $("#btn_generate").click(function() {
+            	var jdbcUrl = $("#jdbcUrl").val();
+                var jdbcUsername = $("#jdbcUsername").val();
+                var jdbcPasswordText = $("#jdbcPasswordText").val();
+                var tableStr = $("#tableStr").val();
+                var basepackageStr = $("#basepackageStr").val();
+                var template = $("#template").val();
+                
+                var postData = {
+                        "jdbcUrl":jdbcUrl,
+                         "jdbcUsername":jdbcUsername,
+                         "jdbcPasswordText":jdbcPasswordText,
+                         "tableStr":tableStr,
+                         "basepackageStr":basepackageStr,
+                         "template":template
+                 };
+                         
+                location.href = "/base/generator/code?jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText+"&tableStr="+tableStr+"&basepackageStr="+basepackageStr+"&template="+template;
+        }
+    };//end add
+        
+     $(function () {
+        var oTable = new TableInit();
+        oTable.Init();
+        add.init();
+    });
+    
+    </script>
+
+</body>
+</html>
