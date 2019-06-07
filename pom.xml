@@ -5,7 +5,7 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.15838028035</groupId>
-	<artifactId>commoncodegenerateweb</artifactId>
+	<artifactId>common-code-generate-web</artifactId>
 	<packaging>jar</packaging>
 	
 	<version>0.0.1-SNAPSHOT</version>
