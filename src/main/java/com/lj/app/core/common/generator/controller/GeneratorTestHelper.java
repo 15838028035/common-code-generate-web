@@ -57,6 +57,13 @@ public class GeneratorTestHelper {
 		tempDir.deleteOnExit();
 		return tempDir;
 	}
+  
+  public static File getOutputTempDir(String outRootDir) {
+		File tempDir = new File(outRootDir, "GeneratorTestHelper" + File.separator
+				+ count.incrementAndGet() + ".tmp");
+		tempDir.deleteOnExit();
+		return tempDir;
+	}
 	
 
 }

@@ -116,6 +116,7 @@
                 cardView: false,                    //是否显示详细视图
                 detailView: false,                   //是否显示父子表
                 undefinedText:"",
+                editable:true,//开启编辑模式  
                 columns: [  
                         { field: 'checkStatus', title: '',checkbox:true }, 
                            {field : 'Number', title : '行号', formatter : function(value, row, index) {  
@@ -128,12 +129,59 @@
                     {field:'sqlTypeName',title:'备注', sortable:true},
                     {field:'remarks',title:'备注', sortable:true},
                     {field:'size',title:'长度', sortable:true},
-                    {field:'listIsShow',title:'列表查询字段是否显示', sortable:true},
-                    {field:'listColumnIsShow',title:'列表列是否显示', sortable:true},
-                    {field:'listMatchType',title:'列表查詢類型', sortable:true},
-                    {field:'formIsShow',title:'表单字段是否显示', sortable:true},
-                    {field:'formShowType',title:'表单查詢類型', sortable:true},
-                    {field:'sortNo',title:'排序编号', sortable:true}
+                    {field:'listIsShow',title:'列表查询字段是否显示', sortable:true,editable:{  
+                        type:'select',//下拉框，如果是下拉则需要设置type为select  
+                        source:[{value:true,text:true},
+                            {value:false,text:false}
+                        ]
+                    }
+                    },
+                    {field:'listColumnIsShow',title:'列表列是否显示', sortable:true,editable:{  
+                        type:'select',//下拉框，如果是下拉则需要设置type为select  
+                        source:[{value:true,text:true},
+                            {value:false,text:false}
+                        ]
+                    }
+                    },
+                    {field:'listMatchType',title:'列表查詢類型', sortable:true,editable:{  
+                        type:'select',//下拉框，如果是下拉则需要设置type为select  
+                        source:[{value:"like",text:"like"},
+                            {value:"=",text:"="}
+                        ]
+                    }
+                    },
+                    {field:'formIsShow',title:'表单字段是否显示', sortable:true,editable:{  
+                        type:'select',//下拉框，如果是下拉则需要设置type为select  
+                        source:[{value:true,text:true},
+                            {value:false,text:false}
+                        ],
+                        onSelect:function(val,rec){  
+                            console.log(val,rec);  
+                        } 
+                    }
+                    },
+                    {field:'formShowType',title:'表单查詢類型', sortable:true,editable:true,editable:{  
+                        type:'select',//下拉框，如果是下拉则需要设置type为select  
+                        source:[{value:"input",text:"input"},
+                            {value:"textarea",text:"textarea"},
+                            {value:"select",text:"select"},
+                            {value:"radio",text:"radio"},
+                            {value:"date",text:"date"},
+                            {value:"checkbox",text:"checkbox"},
+                            {value:"file",text:"file"}
+                        ],
+                        onSelect:function(val,rec){  
+                            console.log(val,rec);  
+                        } 
+                    }
+                    },
+                    {field:'sortNo',title:'排序编号', sortable:true,editable:true,editable:{type:'text' ,  
+                        validate: function (value) {  
+                            if ($.trim(value) == '') {  
+                                return '排序不能为空!';  
+                            }  
+                        }
+                    }}
                     
                         ],                      
                 formatLoadingMessage: function () {

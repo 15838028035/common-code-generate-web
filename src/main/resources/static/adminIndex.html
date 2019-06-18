@@ -63,7 +63,7 @@
                     <div class="col-sm-2"> <input type="text" class="form-control" id="basepackageStr"></div>
 
                 <div class="col-sm-12" style="text-align:left;">
-                    <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
+                    <button type="button" style="margin-left:50px" id="btnQuery" class="btn btn-primary">查询</button>
                 </div>
                 </div>
                 </form>
@@ -116,7 +116,8 @@ var loadInfo = {
     ,
     loadFrame2:function () {
     	$("#LT_main").attr("src",ctx + "/generateTableList.html?parentId=0");
-    },btnQueryClick:function () {
+    },
+    btnQueryClick:function () {
     	$("#btnQuery").click(function(){
 	        var jdbcUrl = $("#jdbcUrl").val();
 	        var jdbcUsername = $("#jdbcUsername").val();

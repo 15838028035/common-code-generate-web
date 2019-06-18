@@ -49,6 +49,7 @@ import com.lj.app.core.common.generator.util.ZipUtils;
 public class GeneratorRest {
   
     private Logger logger = LoggerFactory.getLogger(getClass());
+	
     
   /**
    * 列表
@@ -140,11 +141,7 @@ public class GeneratorRest {
         
         map.put("formIsShow", true);
         
-        if(columnObj.getIsStringColumn()){
-            map.put("formShowType", "like");
-          }else {
-            map.put("formShowType", "=");
-          }
+        map.put("formShowType", "input");
         map.put("sortNo", i+1);
         
         restultList.add(map);
@@ -318,7 +315,9 @@ public class GeneratorRest {
       ZipOutputStream zip = new ZipOutputStream(outputStream);
       
       //文件输出目录
-      File tempDir = GeneratorTestHelper.getOutputTempDir();
+      String outRoot=GeneratorProperties.getProperty("outRoot");
+      
+      File tempDir = new File(outRoot);
       TableViewData tableViewData = new TableViewData();
       tableViewData.setBasepackage(generateTableDataVO.getBasepackageStr());
       tableViewData.setTableName(generateTableDataVO.getTableStr());
