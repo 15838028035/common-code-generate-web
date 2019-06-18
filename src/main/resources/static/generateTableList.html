@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>权限信息表管理</title>
+<title>代码生成管理</title>
    <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -81,7 +81,7 @@
         oTableInit.Init = function () {
             $('#tableList').bootstrapTable({
                 url: ctx+'/base/generator/tableInfo?TOKEN='+token+"&jdbcUrl="+getUrlParam("jdbcUrl")+"&jdbcUsername="
-                		+getUrlParam("jdbcUsername")+"&jdbcPasswordText="+getUrlParam("jdbcPasswordText")+"&tableStr="+getUrlParam("tableStr"),         //请求后台的URL（*）
+                        +getUrlParam("jdbcUsername")+"&jdbcPasswordText="+getUrlParam("jdbcPasswordText")+"&tableStr="+getUrlParam("tableStr"),         //请求后台的URL（*）
                 method: 'get',                     //请求方式（*）
                 dataType: "json",
                 contentType : "application/x-www-form-urlencoded;charset=UTF-8",
@@ -96,7 +96,7 @@
                 showColumns:true,
                 showExport: true,
                 searchOnEnterKey:true,
-                showFooter:true,
+                showFooter:false,
                 search:false,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
@@ -112,7 +112,7 @@
                 pageList: [5,10, 25, 40, 50, 100,'all'],        //可供选择的每页的行数（*）
                 strictSearch: true,
                 clickToSelect: true,                //是否启用点击选中行
-                 uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                 uniqueId: "sqlName",                     //每一行的唯一标识，一般为主键列
                 cardView: false,                    //是否显示详细视图
                 detailView: false,                   //是否显示父子表
                 undefinedText:"",
@@ -125,13 +125,15 @@
                                     }  
                            },
                     {field:'sqlName',title:'列名', sortable:true},
-                    {field:'remarks',title:'列类型', sortable:true},
+                    {field:'sqlTypeName',title:'备注', sortable:true},
                     {field:'remarks',title:'备注', sortable:true},
-                    {field:'remarks',title:'列表是否显示', sortable:true},
-                    {field:'remarks',title:'列表查询类型', sortable:true},
-                    {field:'remarks',title:'表单是否显示', sortable:true},
-                    {field:'remarks',title:'表单类型', sortable:true},
-                    {field:'remarks',title:'排序编号', sortable:true}
+                    {field:'size',title:'长度', sortable:true},
+                    {field:'listIsShow',title:'列表查询字段是否显示', sortable:true},
+                    {field:'listColumnIsShow',title:'列表列是否显示', sortable:true},
+                    {field:'listMatchType',title:'列表查詢類型', sortable:true},
+                    {field:'formIsShow',title:'表单字段是否显示', sortable:true},
+                    {field:'formShowType',title:'表单查詢類型', sortable:true},
+                    {field:'sortNo',title:'排序编号', sortable:true}
                     
                         ],                      
                 formatLoadingMessage: function () {
@@ -185,24 +187,53 @@
         },
         btn_add:function(){
             $("#btn_generate").click(function() {
-            	var jdbcUrl = $("#jdbcUrl").val();
-                var jdbcUsername = $("#jdbcUsername").val();
-                var jdbcPasswordText = $("#jdbcPasswordText").val();
-                var tableStr = $("#tableStr").val();
-                var basepackageStr = $("#basepackageStr").val();
-                var template = $("#template").val();
-                
-                var postData = {
-                        "jdbcUrl":jdbcUrl,
-                         "jdbcUsername":jdbcUsername,
-                         "jdbcPasswordText":jdbcPasswordText,
-                         "tableStr":tableStr,
-                         "basepackageStr":basepackageStr,
-                         "template":template
-                 };
-                         
-                location.href = "/base/generator/code?jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText+"&tableStr="+tableStr+"&basepackageStr="+basepackageStr+"&template="+template;
-        }
+                var jdbcUrl = encodeURIComponent($("#jdbcUrl",parent.document.body).val());
+                var jdbcUsername = $("#jdbcUsername",parent.document.body).val();
+                var jdbcPasswordText = $("#jdbcPasswordText",parent.document.body).val();
+                var basepackageStr = $("#basepackageStr",parent.document.body).val();
+                var template = $("#template",parent.document.body).val();
+               
+                var getSelections = $tableList.bootstrapTable('getSelections');
+                if(getSelections == ""){
+                    bootbox.alert('请选择要操作的记录');
+                    return;
+                }
+               var columns =  getSelections;
+               var tableStr = getUrlParam("tableStr");
+               
+               var postData = {
+                       "jdbcUrl":jdbcUrl,
+                        "jdbcUsername":jdbcUsername,
+                        "jdbcPasswordText":jdbcPasswordText,
+                        "basepackageStr":basepackageStr,
+                        "template":template,
+                        "tableColumSet":columns,
+                        "tableStr":tableStr
+                };
+               
+               $.ajax({
+                   url: ctx + "/base/generator/codeV5",
+                   data: JSON.stringify(postData),
+                   type: "post",
+                   dataType: "json",
+                   contentType:"application/json",
+                   success: function(data){
+                       if(data.respCode=="0"){
+                           bootbox.alert(data.respMsg);
+                       }else {
+                               var outputTempDir = encodeURIComponent(data.respData);
+                           window.location.href=ctx+"/base/generator/downloadfile?outputTempDir="+outputTempDir;
+                       }
+                   },
+                   error: function(data){
+                       bootbox.alert("异常");
+                       return false;
+                   }
+               }); 
+               
+             //   location.href = "/base/generator/codeV5?jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText+"&basepackageStr="+basepackageStr+"&template="+template+"&columns="+columns;
+            });
+            }
     };//end add
         
      $(function () {

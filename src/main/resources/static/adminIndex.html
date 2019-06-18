@@ -107,12 +107,10 @@ var loadInfo = {
     	loadInfo.btnQueryClick();
     },
     loadFrame1:function () {
-    	alert("1");
     	var jdbcUrl =encodeURIComponent( $("#jdbcUrl").val());
         var jdbcUsername = $("#jdbcUsername").val();
         var jdbcPasswordText = $("#jdbcPasswordText").val();
         
-        alert(jdbcUrl);
         $("#LT_menu").attr("src",ctx + "/generateTree.html?jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText);
     }
     ,
@@ -136,9 +134,6 @@ var loadInfo = {
     	          async: false, 
     	          
     	          success: function (data) {
-    	        	  alert("2");
-    	        	  console.log("data",data);
-    	        	  
     	              $("#jdbcUrl").val(data['jdbc.url']);
     	              $("#jdbcUsername").val(data['jdbc.username']);
     	              $("#jdbcPasswordText").val(data['jdbc.password']);

@@ -75,18 +75,15 @@
                     showCheckbox:false,
                     showIcon:true,
                     onNodeSelected: function(event, data) {
-                    	alert("test");
                          var treeNodeId = data.id;
                          $("#LT_main",parent.document.body).contents().find("#perssionParentId").val(treeNodeId);
-                         var aa = $("#LT_main",parent.document.body).contents().find("#perssionParentId").val();
-                         
-                         alert("aa="+aa);
-                         var jdbcUrl = $("#LT_main",parent.document.body).contents().find("#jdbcUrl").val();
-                         var jdbcUsername = $("#LT_main",parent.document.body).contents().find("#jdbcUsername").val();
-                         var jdbcPasswordText = $("#LT_main",parent.document.body).contents().find("#jdbcPasswordText").val();
-                         var newUrl=ctx +"/generateTableList.html?parentId="+treeNodeId+"&jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText;
-                        alert(newUrl);
-                         //parent.LT_main.src = newUrl;
+                         var jdbcUrl = encodeURIComponent($("#jdbcUrl",parent.document.body).val());
+                         var jdbcUsername = $("#jdbcUsername",parent.document.body).val();
+                         var jdbcPasswordText = $("#jdbcPasswordText",parent.document.body).val();
+                         var newUrl=ctx +"/generateTableList.html?parentId="+treeNodeId+"&jdbcUrl="+jdbcUrl
+                        		 +"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText
+                        		 +"&tableStr="+treeNodeId;
+                         parent.LT_main.src = newUrl;
                     }
                 }
              );
