@@ -2,6 +2,7 @@ var url=window.location.href;
 var start=window.location.host.length+window.location.protocol.length+2;
 var end = url.indexOf("/upm");
 var ctx=url.substring(start,end);
+ctx = "http://192.168.120.134:7777";
 /**
 * 文本输入框鼠标定位时消除提示语
 * @param inputId 输入框id
