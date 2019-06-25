@@ -106,6 +106,24 @@ var loadInfo = {
     	loadInfo.loadFrame2();
     	loadInfo.btnQueryClick();
     },
+    getInitConfig:function () {
+        $.ajax({
+              url: "/base/generator/getInitConfig",
+              data: {},
+              type: "GET",
+              dataType: "json",
+              async: false, 
+              success: function (data) {
+                  $("#jdbcUrl").val(data['jdbc.url']);
+                  $("#jdbcUsername").val(data['jdbc.username']);
+                  $("#jdbcPasswordText").val(data['jdbc.password']);
+                  $("#tableStr").val(data.tableStr);
+                  $("#basepackageStr").val(data.basepackage);
+                  $("#template").val(data.template);
+              }
+              
+          });
+     },
     loadFrame1:function () {
     	var jdbcUrl =encodeURIComponent( $("#jdbcUrl").val());
         var jdbcUsername = $("#jdbcUsername").val();
@@ -126,26 +144,8 @@ var loadInfo = {
 	        //$("#LT_main").attr("src",ctx + "/generateTableList.html?jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText);
     	});
     	
-    	},getInitConfig:function () {
-    		$.ajax({
-    	          url: "/base/generator/getInitConfig",
-    	          data: {},
-    	          type: "GET",
-    	          dataType: "json",
-    	          async: false, 
-    	          
-    	          success: function (data) {
-    	              $("#jdbcUrl").val(data['jdbc.url']);
-    	              $("#jdbcUsername").val(data['jdbc.username']);
-    	              $("#jdbcPasswordText").val(data['jdbc.password']);
-    	              $("#tableStr").val(data.tableStr);
-    	              $("#basepackageStr").val(data.basepackage);
-    	              $("#template").val(data.template);
-    	          }
-    	          
-    	      });
-            }
-};
+    	}
+    };
 
 $(function(){
 //用户登录

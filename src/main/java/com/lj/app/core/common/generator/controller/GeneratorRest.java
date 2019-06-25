@@ -315,9 +315,7 @@ public class GeneratorRest {
       ZipOutputStream zip = new ZipOutputStream(outputStream);
       
       //文件输出目录
-      String outRoot=GeneratorProperties.getProperty("outRoot");
-      
-      File tempDir = new File(outRoot);
+      File tempDir =GeneratorTestHelper.getOutputTempDir();
       TableViewData tableViewData = new TableViewData();
       tableViewData.setBasepackage(generateTableDataVO.getBasepackageStr());
       tableViewData.setTableName(generateTableDataVO.getTableStr());
