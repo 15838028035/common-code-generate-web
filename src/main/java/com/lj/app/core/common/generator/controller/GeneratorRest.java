@@ -22,9 +22,10 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lj.app.core.common.generator.GeneratorFacade;
@@ -55,13 +56,13 @@ public class GeneratorRest {
    * 列表
    */
   @ResponseBody
-  @RequestMapping("/getInitConfig")
-  public Properties getInitConfig() throws Exception {
+  @GetMapping("/getInitConfig")
+  public Properties getInitConfig()  {
       return GeneratorProperties.getProperties();
   }
   
   @ResponseBody
-  @RequestMapping("/getGenerateTree")
+  @GetMapping("/getGenerateTree")
     public String getGenerateTree(String jdbcUrl,String jdbcUsername, String jdbcPasswordText, HttpServletRequest request) throws Exception {
       String jsonData ="";
 
@@ -74,7 +75,6 @@ public class GeneratorRest {
       GeneratorProperties.setProperty("jdbc.password", jdbcPasswordText);
       
       List<Table> result = DbTableFactory.getInstance().getAllTables();
-      int total =result.size();
       
       List<BootStrapTreeView> treeNodeList = new ArrayList<>();
       BootStrapTreeView bootStrapTreeView = new BootStrapTreeView();
@@ -102,8 +102,8 @@ public class GeneratorRest {
    *获得表具体信息
    */
   @ResponseBody
-  @RequestMapping("/tableInfo")
-  public Map tableInfo(String jdbcUrl,String jdbcUsername, String jdbcPasswordText, String tableStr) throws Exception {
+  @GetMapping("/tableInfo")
+  public Map<String,Object> tableInfo(String jdbcUrl,String jdbcUsername, String jdbcPasswordText, String tableStr) throws Exception {
      
     
     if(jdbcUrl!=null && !"".equals(jdbcUrl)) {
@@ -149,7 +149,7 @@ public class GeneratorRest {
       }
       
       
-      Map<String,Object> map = new HashMap();
+      Map<String,Object> map = new HashMap<>();
       map.put("count", i);
       map.put("data", restultList);
       
@@ -160,8 +160,8 @@ public class GeneratorRest {
    * 列表
    */
   @ResponseBody
-  @RequestMapping("/page")
-  public Map list(String jdbcUrl,String jdbcUsername, String jdbcPasswordText, String tableStr,
+  @GetMapping("/page")
+  public Map<String,Object> list(String jdbcUrl,String jdbcUsername, String jdbcPasswordText, String tableStr,
       String basepackageStr) throws Exception {
     
     if(jdbcUrl!=null && !"".equals(jdbcUrl)) {
@@ -177,12 +177,11 @@ public class GeneratorRest {
       List<Map<String,Object>> restultList = new ArrayList<>();
       
       for (int i = 0; i < result.size(); i++) {
-        Table table = (Table) result.get(i);
+        Table table =  result.get(i);
         
         Map<String,Object> map = new HashMap<>();
         map.put("sqlName", table.getSqlName());
         map.put("remarks", table.getRemarks());
-        map.put("sqlName", table.getSqlName());
         
         restultList.add(map);
       }
@@ -198,7 +197,7 @@ public class GeneratorRest {
   /**
    * 生成代码
    */
-  @RequestMapping("/code")
+  @GetMapping("/code")
   public void code(HttpServletRequest request, HttpServletResponse response, String jdbcUrl,String jdbcUsername, String jdbcPasswordText,
       String tableStr, String basepackageStr, String template) throws Exception {
 
@@ -227,13 +226,11 @@ public class GeneratorRest {
       GeneratorProperties.setProperty("basepackage_dir",
       GeneratorProperties.getProperty("basepackage").replace(".", "/"));
       
-      try{
-      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-      ZipOutputStream zip = new ZipOutputStream(outputStream);
-      
+      try(
+              ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+              ZipOutputStream zip = new ZipOutputStream(outputStream);
+              ){
       GeneratorTestHelper.generateByTable(g,zip, tableStr);
-    
-      IOUtils.closeQuietly(zip);
       
       byte[] data = outputStream.toByteArray();
 
@@ -251,18 +248,16 @@ public class GeneratorRest {
   /**
    * 生成代码
    */
-  @RequestMapping(value="/codeV5", method = RequestMethod.POST)
+  @PostMapping(value="/codeV5")
   @ResponseBody
   public Map<String,Object> codeV5(HttpServletRequest request, HttpServletResponse response,@RequestBody GenerateTableDataVO generateTableDataVO) throws Exception {
-      String[] tableNames = new String[]{};
-
       Map<String,Object> retMap  = new HashMap<>();
 
       GeneratorProductAndConsumerFacade g = new GeneratorProductAndConsumerFacade();
       g.clean();
       
       if(generateTableDataVO.getJdbcUrl()!=null && !"".equals(generateTableDataVO.getJdbcUrl())) {
-        GeneratorProperties.setProperty("jdbc.url", URLDecoder.decode(generateTableDataVO.getJdbcUrl()));
+        GeneratorProperties.setProperty("jdbc.url", URLDecoder.decode(generateTableDataVO.getJdbcUrl(),"UTF-8"));
       }
      
       GeneratorProperties.setProperty("jdbc.username", generateTableDataVO.getJdbcUsername());
@@ -273,7 +268,7 @@ public class GeneratorRest {
       }
       
       if(generateTableDataVO.getTemplate()!=null && !"".equals(generateTableDataVO.getTemplate())) {
-          g.getGenerator().setTemplateRootDir( URLDecoder.decode(generateTableDataVO.getTemplate()));
+          g.getGenerator().setTemplateRootDir( URLDecoder.decode(generateTableDataVO.getTemplate(),"UTF-8"));
         }
       
       GeneratorProperties.setProperty("basepackage_dir",
@@ -337,16 +332,15 @@ public class GeneratorRest {
   /**
    * 下载代码
    */
-  @RequestMapping("/downloadfile")
+  @GetMapping("/downloadfile")
   public void downloadfile(HttpServletRequest request, HttpServletResponse response, String outputTempDir)  {
       
-      try{
+      try( ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+              ZipOutputStream zip = new ZipOutputStream(outputStream);
+          ){
           File tempDir = new File(outputTempDir);
-      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-      ZipOutputStream zip = new ZipOutputStream(outputStream);
-      ZipUtils.doCompress(tempDir, zip);
-      IOUtils.closeQuietly(zip);
-      
+          ZipUtils.doCompress(tempDir, zip);
+          
       byte[] data = outputStream.toByteArray();
 
       response.reset();
