@@ -21,7 +21,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,12 +50,6 @@ import com.lj.app.core.common.generator.util.ZipUtils;
 public class GeneratorRest {
   
     private Logger logger = LoggerFactory.getLogger(getClass());
-    
-	/**
-	 * 模板输出目录
-	 */
-    @Value("${outRoot}")
-   private String outRoot;
   /**
    * 列表
    */
@@ -315,7 +308,7 @@ public class GeneratorRest {
       ZipOutputStream zip = new ZipOutputStream(outputStream);
       
       //文件输出目录
-      File tempDir =new File(outRoot);
+      File tempDir =new File(GeneratorProperties.getProperty("outRoot"));
       TableViewData tableViewData = new TableViewData();
       tableViewData.setBasepackage(generateTableDataVO.getBasepackageStr());
       tableViewData.setTableName(generateTableDataVO.getTableStr());
