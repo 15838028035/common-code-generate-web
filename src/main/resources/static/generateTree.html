@@ -80,6 +80,7 @@
                          var jdbcUrl = encodeURIComponent($("#jdbcUrl",parent.document.body).val());
                          var jdbcUsername = $("#jdbcUsername",parent.document.body).val();
                          var jdbcPasswordText = $("#jdbcPasswordText",parent.document.body).val();
+                         
                          var newUrl=ctx +"/generateTableList.html?parentId="+treeNodeId+"&jdbcUrl="+jdbcUrl
                         		 +"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText
                         		 +"&tableStr="+treeNodeId;

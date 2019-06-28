@@ -77,11 +77,16 @@
      
      var TableInit = function () {
         var oTableInit = new Object();
+        
+        var jdbcUrl = encodeURIComponent($("#jdbcUrl",parent.document.body).val());
+        var jdbcUsername = $("#jdbcUsername",parent.document.body).val();
+        var jdbcPasswordText = $("#jdbcPasswordText",parent.document.body).val();
+        
         //初始化Table
         oTableInit.Init = function () {
             $('#tableList').bootstrapTable({
-                url: ctx+'/base/generator/tableInfo?TOKEN='+token+"&jdbcUrl="+getUrlParam("jdbcUrl")+"&jdbcUsername="
-                        +getUrlParam("jdbcUsername")+"&jdbcPasswordText="+getUrlParam("jdbcPasswordText")+"&tableStr="+getUrlParam("tableStr"),         //请求后台的URL（*）
+                url: ctx+'/base/generator/tableInfo?TOKEN='+token+"&jdbcUrl="+jdbcUrl+"&jdbcUsername="
+                        +jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText+"&tableStr="+getUrlParam("tableStr"),         //请求后台的URL（*）
                 method: 'get',                     //请求方式（*）
                 dataType: "json",
                 contentType : "application/x-www-form-urlencoded;charset=UTF-8",
