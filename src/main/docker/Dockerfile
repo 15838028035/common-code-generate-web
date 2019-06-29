@@ -1,11 +1,12 @@
 FROM adoptopenjdk/openjdk8-openj9:alpine-slim
 VOLUME /tmp
+RUN mkdir app
+RUN mkdir -p /app/config
+RUN mkdir -p /app/lib
 
-ADD common-code-generate-web-0.0.1-SNAPSHOT.jar /common-code-generate-web-0.0.1-SNAPSHOT.jar
-RUN mkdir lib
-RUN mkdir config
-ADD lib /lib
-ADD config /config
-ADD config/generator.properties /
+ADD common-code-generate-web-0.0.1-SNAPSHOT.jar /app/common-code-generate-web-0.0.1-SNAPSHOT.jar
+ADD config /app/config
+ADD config/generator.properties /app
+ADD lib /app/lib
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/common-code-generate-web-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/common-code-generate-web-0.0.1-SNAPSHOT.jar"]
