@@ -9,4 +9,4 @@ COPY config/* /app/config/
 COPY config/generator.properties /app/
 COPY lib/*.jar /app/lib/
 
-# ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/common-code-generate-web-0.0.1-SNAPSHOT.jar"]
+ ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/common-code-generate-web-0.0.1-SNAPSHOT.jar"]
