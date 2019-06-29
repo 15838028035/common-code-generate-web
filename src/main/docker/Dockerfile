@@ -5,8 +5,8 @@ RUN mkdir -p /app/config
 RUN mkdir -p /app/lib
 
 ADD common-code-generate-web-0.0.1-SNAPSHOT.jar /app/common-code-generate-web-0.0.1-SNAPSHOT.jar
-ADD config /app/config
-ADD config/generator.properties /app
-ADD lib /app/lib
+COPY config /app/config
+COPY config/generator.properties /app
+COPY lib /app/lib
 
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/common-code-generate-web-0.0.1-SNAPSHOT.jar"]
