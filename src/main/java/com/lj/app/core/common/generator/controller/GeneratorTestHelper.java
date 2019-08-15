@@ -47,7 +47,8 @@ public class GeneratorTestHelper {
 	public static void generateByTable(File tempDir,GeneratorProductAndConsumerFacade gf, ZipOutputStream zip,
 	        TableViewData tableViewData) throws Exception {
         gf.getGenerator().setOutRootDir(tempDir.getPath());
-        gf.generateByTable(tableViewData);
+        gf.add(tableViewData);
+        gf.consumerTable();
         // ZipUtils.doCompress(tempDir, zip);
       }
 
