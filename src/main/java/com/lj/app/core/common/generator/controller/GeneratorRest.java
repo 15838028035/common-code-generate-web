@@ -75,11 +75,10 @@ public class GeneratorRest {
       List<Table> result = DbTableFactory.getInstance().getAllTables();
       
       List<BootStrapTreeView> treeNodeList = new ArrayList<>();
-      BootStrapTreeView bootStrapTreeView = new BootStrapTreeView();
       BootStrapTreeViewCheck bootStrapTreeViewCheck = new BootStrapTreeViewCheck(null,"ROOT");
       
-      for(Table table: result){
-          bootStrapTreeView = new BootStrapTreeView();
+      result.forEach(table->{
+    	  BootStrapTreeView  bootStrapTreeView = new BootStrapTreeView();
           bootStrapTreeView.setId(table.getSqlName());
           bootStrapTreeView.setText(table.getSqlName());
           bootStrapTreeView.setParentId("0");
@@ -87,7 +86,7 @@ public class GeneratorRest {
           
           
           bootStrapTreeViewCheck.addNode(table.getSqlName(), false, table.getSqlName());
-      }
+      });
       
       jsonData=  bootStrapTreeViewCheck.toJsonString();
       if (StringUtil.isBlank(jsonData)) {
