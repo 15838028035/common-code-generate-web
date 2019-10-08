@@ -216,9 +216,10 @@ public class GeneratorRest {
         GeneratorProperties.setProperty("basepackage", basepackageStr);
       }
       
+      
       if(template!=null && !"".equals(template)) {
-        GeneratorProperties.setProperty("template", template);
-      }
+          g.getGenerator().setTemplateRootDir( URLDecoder.decode(template,"UTF-8"));
+        }
       
       GeneratorProperties.setProperty("basepackage_dir",
       GeneratorProperties.getProperty("basepackage").replace(".", "/"));
@@ -332,20 +333,21 @@ public class GeneratorRest {
   @GetMapping("/downloadfile")
   public void downloadfile(HttpServletRequest request, HttpServletResponse response, String outputTempDir)  {
       
-      try( ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-              ZipOutputStream zip = new ZipOutputStream(outputStream);
-          ){
+      try {
+    	  ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+          ZipOutputStream zip = new ZipOutputStream(outputStream);
           File tempDir = new File(outputTempDir);
           ZipUtils.doCompress(tempDir, zip);
+          IOUtils.closeQuietly(zip);
           
-      byte[] data = outputStream.toByteArray();
-
-      response.reset();
-      response.setHeader("Content-Disposition", "attachment; filename=\"common-code-gencode.zip\"");
-      response.addHeader("Content-Length", "" + data.length);
-      response.setContentType("application/octet-stream; charset=UTF-8");
-
-      IOUtils.write(data, response.getOutputStream());
+	      byte[] data = outputStream.toByteArray();
+	
+	      response.reset();
+	      response.setHeader("Content-Disposition", "attachment; filename=\"common-code-gencode.zip\"");
+	      response.addHeader("Content-Length", "" + data.length);
+	      response.setContentType("application/octet-stream; charset=UTF-8");
+	
+	      IOUtils.write(data, response.getOutputStream());
       }catch(Exception e) {
           logger.error("生成文件异常",e);
       }

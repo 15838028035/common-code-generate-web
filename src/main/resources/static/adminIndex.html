@@ -125,10 +125,9 @@ var loadInfo = {
           });
      },
     loadFrame1:function () {
-    	var jdbcUrl =encodeURIComponent( $("#jdbcUrl").val());
+    	var jdbcUrl =encodeURIComponent($("#jdbcUrl").val());
         var jdbcUsername = $("#jdbcUsername").val();
         var jdbcPasswordText = $("#jdbcPasswordText").val();
-        
         $("#LT_menu").attr("src",ctx + "/generateTree.html?jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText);
     }
     ,
@@ -137,7 +136,7 @@ var loadInfo = {
     },
     btnQueryClick:function () {
     	$("#btnQuery").click(function(){
-	        var jdbcUrl = $("#jdbcUrl").val();
+	        var jdbcUrl = encodeURIComponent($("#jdbcUrl").val());
 	        var jdbcUsername = $("#jdbcUsername").val();
 	        var jdbcPasswordText = $("#jdbcPasswordText").val();
 	        $("#LT_menu").attr("src",ctx + "/generateTree.html?jdbcUrl="+jdbcUrl+"&jdbcUsername="+jdbcUsername+"&jdbcPasswordText="+jdbcPasswordText);

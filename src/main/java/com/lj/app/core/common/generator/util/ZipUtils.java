@@ -79,7 +79,10 @@ public class ZipUtils {
     }
     
     public static void main(String[] args) throws IOException {
-        doCompress("C:\\Users\\liujie\\AppData\\Local\\Temp\\GeneratorTestHelper\\1559781874374.tmp", "D:\\aa.zip");
+       // doCompress("G:\\generator-output", "g:\\aa.zip");
+    	//G:\workspace\common-code-generate-template\template2
+        File file = new File("G:\\workspace\\common-code-generate-template\\template2");
+        System.out.println(file.isDirectory());
     }
     
 }

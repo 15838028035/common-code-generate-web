@@ -23,7 +23,6 @@ public class GeneratorTestHelper {
 	      File tempDir = getOutputTempDir();
 	      gf.getGenerator().setOutRootDir(tempDir.getPath());
 	      gf.generateByTable(tableNames);
-	      // readEntireDirectoryContentAndDelete(tempDir,gf.getGenerator().getOutputEncoding(),zip);
 	       ZipUtils.doCompress(tempDir, zip);
 	    }
 	
@@ -31,7 +30,6 @@ public class GeneratorTestHelper {
       String... tableNames) throws Exception {
     gf.getGenerator().setOutRootDir(tempDir.getPath());
     gf.generateByTable(tableNames);
-    // readEntireDirectoryContentAndDelete(tempDir,gf.getGenerator().getOutputEncoding(),zip);
      ZipUtils.doCompress(tempDir, zip);
   }
 	
@@ -40,7 +38,6 @@ public class GeneratorTestHelper {
 	      File tempDir = getOutputTempDir();
 	      gf.getGenerator().setOutRootDir(tempDir.getPath());
 	      gf.generateByTable(tableNames);
-	      // readEntireDirectoryContentAndDelete(tempDir,gf.getGenerator().getOutputEncoding(),zip);
 	       ZipUtils.doCompress(tempDir, zip);
 	    }
 	

@@ -41,3 +41,35 @@ function getUrlParam  (name) {
     if (r != null) return unescape(r[2]);
     return null;
 }
+
+/**
+ * 获取url参数
+ * @param name
+ * @param name2
+ * @returns
+ */
+function getUrlParamValue(name,name2) {
+
+	if (name == null || name == 'undefined') {
+		return null; 
+	}
+
+	var searchStr = decodeURI(location.search);
+
+	var infoIndex = searchStr.indexOf(name + "=");
+	
+	if (infoIndex == -1) {
+		return null; 
+	}
+
+	var searchInfo = searchStr.substring(infoIndex + name.length + 1);
+
+	var tagIndex = searchInfo.indexOf("&"+name2);
+
+	if (tagIndex !=-1 ) { 
+		searchInfo = searchInfo.substring(0, tagIndex);
+		}
+
+	return searchInfo;
+
+	}
