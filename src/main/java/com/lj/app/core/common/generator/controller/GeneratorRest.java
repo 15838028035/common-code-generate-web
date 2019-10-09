@@ -269,6 +269,10 @@ public class GeneratorRest {
           g.getGenerator().setTemplateRootDir( URLDecoder.decode(generateTableDataVO.getTemplate(),"UTF-8"));
         }
       
+      if(generateTableDataVO.getModelName()!=null && !"".equals(generateTableDataVO.getModelName())) {
+          GeneratorProperties.setProperty("modelName", generateTableDataVO.getModelName());
+        }
+      
       GeneratorProperties.setProperty("basepackage_dir",
       GeneratorProperties.getProperty("basepackage").replace(".", "/"));
       //确保有序

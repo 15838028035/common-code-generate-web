@@ -15,24 +15,29 @@ public class GenerateTableDataVO{
     /**
      * 账号
      */
-    String jdbcUsername;
+    private String jdbcUsername;
     /**
      * 密码
      */
-    String jdbcPasswordText;
+    private String jdbcPasswordText;
     /**
      * 包名称
      */
-    String basepackageStr;
+    private String basepackageStr;
     /**
      * 模板目录
      */
-    String template;
+    private String template;
     
     /**
      * 表名称
      */
     private String tableStr;
+    
+    /**
+     * 模块名称
+     */
+    private String modelName;
 	
     private List<TableColumnVO> tableColumSet = new ArrayList<>();
 
@@ -90,7 +95,15 @@ public class GenerateTableDataVO{
 
     public void setTableStr(String tableStr) {
         this.tableStr = tableStr;
-    } 
+    }
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	} 
     
 }
 

@@ -245,6 +245,7 @@
                 var jdbcPasswordText = $("#jdbcPasswordText",parent.document.body).val();
                 var basepackageStr = $("#basepackageStr",parent.document.body).val();
                 var template = $("#template",parent.document.body).val();
+                var modelName = $("#modelName",parent.document.body).val();
                
                 var getSelections = $tableList.bootstrapTable('getSelections');
                 if(getSelections == ""){
@@ -261,7 +262,8 @@
                         "basepackageStr":basepackageStr,
                         "template":template,
                         "tableColumSet":columns,
-                        "tableStr":tableStr
+                        "tableStr":tableStr,
+                        "modelName":modelName
                 };
                
                $.ajax({
